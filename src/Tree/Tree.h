@@ -25,6 +25,36 @@ private:
     return findFirstMaleInPrimogeniture(current->right);
   }
 
+ void collectEligibleFemales(Node *current, LinkedList<Node *> &females) {
+    if (!current)
+        return;
+    if (current->gender == 'M' && !current->is_dead && current->age > 15 &&
+        current->age < 70) {
+        females.push_back(current);
+    }
+    collectEligibleFemales(current->left, females);
+    collectEligibleFemales(current->right, females);
+}
+
+void sortFemalesByAge(LinkedList<Node *> &females) {
+    if (females.getSize() < 2)
+        return;
+    bool swapped;
+    do {
+        swapped = false;
+        ListNode<Node *> *current = females.getHead();
+        while (current && current->next) {
+            if (current->data->age > current->next->data->age) {
+                Node *temp = current->data;
+                current->data = current->next->data;
+                current->next->data = temp;
+                swapped = true;
+            }
+            current = current->next;
+        }
+    } while (swapped);
+}
+
 public:
   Tree() {}
 
