@@ -136,6 +136,92 @@ public:
     return nullptr;
   }
 
+  Node *determineSuccessor(Node *currentKing) {
+    if (!currentKing)
+      return nullptr;
+    Node *candidate = findFirstMaleInPrimogeniture(currentKing->left);
+    if (candidate)
+      return candidate;
+    if (currentKing->parent) {
+      Node *parent = currentKing->parent;
+      Node *sibling =
+          (parent->left == currentKing) ? parent->right : parent->left;
+
+      if (sibling) {
+        candidate = findFirstMaleInPrimogeniture(sibling->left);
+        if (candidate)
+          return candidate;
+
+        if (!sibling->is_dead && sibling->gender == 'H' && sibling->age < 70) {
+          return sibling;
+        }
+
+        candidate = findFirstMaleInPrimogeniture(sibling->right);
+        if (candidate)
+          return candidate;
+      }
+    }
+    Node *curr = currentKing;
+    while (curr->parent) {
+      Node *father = curr->parent;
+      Node *grandfather = father->parent;
+      if (grandfather) {
+        Node *uncle =
+            (grandfather->left == father) ? grandfather->right : nullptr;
+
+        if (uncle) {
+          candidate = findFirstMaleInPrimogeniture(uncle->left);
+          if (candidate)
+            return candidate;
+
+          if (!uncle->is_dead && uncle->gender == 'H' && uncle->age < 70) {
+            return uncle;
+          }
+
+          candidate = findFirstMaleInPrimogeniture(uncle->right);
+          if (candidate)
+            return candidate;
+        }
+      }
+      curr = father; // Go up
+    }
+    LinkedList<Node *> females;
+    collectEligibleFemales(root, females);
+
+    if (females.isEmpty())
+      return nullptr;
+    sortFemalesByAge(females);
+
+    return females.getHead()->data;
+  }
+
+  void updateKing() {
+    Node *currentKing = getKing();
+    if (!currentKing) {
+      return;
+    }
+
+    bool needsSuccession = false;
+    if (currentKing->is_dead || currentKing->age >= 70) {
+      needsSuccession = true;
+    }
+
+    if (needsSuccession) {
+      Node *newKing = determineSuccessor(currentKing);
+      if (newKing) {
+        currentKing->is_king = false;
+        currentKing->was_king = true;
+        newKing->is_king = true;
+        cout << "¡EL REY HA MUERTO (O SE HA RETIRADO)! LARGA VIDA AL "
+             << (newKing->gender == 'H' ? "REY" : "REINA") << " "
+             << newKing->name << " " << newKing->last_name << "!" << endl;
+      } else {
+        cout << "¡No se encontro sucesor elegible! La linea ha terminado."
+             << endl;
+      }
+    }
+  }
+
   void printLineOfSuccession(Node *node) {
     if (!node)
       return;

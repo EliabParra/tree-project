@@ -52,10 +52,35 @@ int main() {
 
     switch (option) {
     case 1:
-      cout << "Linea de sucesion:" << endl;
+      clearScreen();
+      royalTree.printSuccession();
       break;
     case 2:
-      cout << "Actualizar persona:" << endl;
+      int id;
+      cout << "Ingrese ID de la persona a actualizar: ";
+      cin >> id;
+      Node *node = royalTree.getNode(id);
+      if (node) {
+        cout << "Actualizando a " << node->name << " " << node->last_name << endl;
+        cout << "1. Marcar como Fallecido" << endl;
+        cout << "2. Actualizar Edad" << endl;
+        cout << "3. Cancelar" << endl;
+        int subOption;
+        cin >> subOption;
+        if (subOption == 1) {
+          node->is_dead = true;
+          cout << "Marcado como fallecido." << endl;
+        } else if (subOption == 2) {
+          int newAge; 
+          cout << "Ingrese nueva edad: ";
+          cin >> newAge;
+          node->age = newAge;
+          cout << "Edad actualizada." << endl;
+        }
+        royalTree.updateKing();
+      } else {
+        cout << "Persona no encontrada." << endl;
+      }
       break;
     case 3:
       cout << "Evaluar corona:" << endl;
