@@ -32,9 +32,7 @@ int main() {
   royalTree.loadFromCSV(csvPath);
 
   if (royalTree.getRoot() == nullptr) {
-    cout << "Error: No se pudo cargar el arbol o esta vacio. Verifique "
-            "bin/datos.csv"
-         << endl;
+    cout << "Error: No se pudo cargar el arbol o esta vacio. Verifique bin/datos.csv" << endl;
     royalTree.loadFromCSV("datos.csv");
   }
 
@@ -42,5 +40,36 @@ int main() {
     cout << "Fallo al cargar datos. Saliendo." << endl;
     return 1;
   }
-    return 0;
+
+  int option = 0;
+  while (option != 5) {
+    printMenu();
+    if (!(cin >> option)) {
+      cin.clear();
+      cin.ignore(10000, '\n');
+      continue;
+    }
+
+    switch (option) {
+    case 1:
+      cout << "Linea de sucesion:" << endl;
+      break;
+    case 2:
+      cout << "Actualizar persona:" << endl;
+      break;
+    case 3:
+      cout << "Evaluar corona:" << endl;
+      break;
+    case 4:
+      cout << "Rey actual:" << endl;
+      break;
+    case 5:
+      cout << "Saliendo..." << endl;
+      break;
+    default:
+      cout << "Opcion invalida." << endl;
+    }
+  }
+
+  return 0;
 }

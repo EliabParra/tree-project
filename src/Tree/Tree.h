@@ -13,6 +13,17 @@ class Tree {
 private:
   Node *root = nullptr;
   LinkedList<Node *> allNodes;
+  Node *findFirstMaleInPrimogeniture(Node *current) {
+    if (!current)
+      return nullptr;
+    if (current->gender == 'H' && !current->is_dead && current->age < 70) {
+      return current;
+    }
+    Node *found = findFirstMaleInPrimogeniture(current->left);
+    if (found)
+      return found;
+    return findFirstMaleInPrimogeniture(current->right);
+  }
 
 public:
   Tree() {}
