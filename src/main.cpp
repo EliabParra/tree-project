@@ -82,12 +82,21 @@ int main() {
         cout << "Persona no encontrada." << endl;
       }
       break;
+      
     case 3:
-      cout << "Evaluar corona:" << endl;
+      royalTree.updateKing();
       break;
-    case 4:
-      cout << "Rey actual:" << endl;
+    case 4: {
+      Node *king = royalTree.getKing();
+      if (king) {
+        cout << "Actual " << (king->gender == 'H' ? "Rey" : "Reina") << ": "
+             << king->name << " " << king->last_name << " (Edad: " << king->age
+             << ")" << endl;
+      } else {
+        cout << "¡No hay Rey actualmente!" << endl;
+      }
       break;
+    }
     case 5:
       cout << "Saliendo..." << endl;
       break;
